@@ -85,8 +85,6 @@ $_SESSION['error'] = 'Error al crear el pago en PayPal: ' . $mensaje_error;
 error_log('PayPal payment creation error: ' . $mensaje_error);
 header('Location: perfil.php');
 exit(); */
-
-<?php
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -104,9 +102,7 @@ if ($cantidad <= 0) {
     exit();
 }
 
-/* =========================
-   1. OBTENER TOKEN
-========================= */
+
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
@@ -134,9 +130,7 @@ if (!$token) {
     exit();
 }
 
-/* =========================
-   2. CREAR ORDER (V2)
-========================= */
+
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders");
@@ -168,9 +162,6 @@ $res = curl_exec($ch);
 $result = json_decode($res, true);
 curl_close($ch);
 
-/* =========================
-   3. REDIRIGIR A PAYPAL
-========================= */
 if (!empty($result['links'])) {
     foreach ($result['links'] as $link) {
         if ($link['rel'] === 'approve') {
