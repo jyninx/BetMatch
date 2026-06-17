@@ -102,9 +102,22 @@ if ($cantidad <= 0) {
     exit();
 }
 
-var_dump(PAYPAL_API_BASE);
-exit;
+
 $ch = curl_init();
+
+if (!isset($ch)) {
+    die(" CURL handler no inicializado");
+}
+
+$info = curl_getinfo($ch);
+
+var_dump($info);
+
+if (empty($info['url'])) {
+    die(" NO HAY URL ASIGNADA AL CURL");
+}
+
+
 $res = curl_exec($ch);
 
 if ($res === false) {
@@ -131,7 +144,17 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Accept: application/json",
     "Accept-Language: en_US"
 ]);
+if (!isset($ch)) {
+    die(" X CURL handler no inicializado");
+}
 
+$info = curl_getinfo($ch);
+
+var_dump($info);
+
+if (empty($info['url'])) {
+    die("X NO HAY URL ASIGNADA AL CURL");
+}
 $res = curl_exec($ch);
 $data = json_decode($res, true);
 curl_close($ch);
