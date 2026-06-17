@@ -119,15 +119,21 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 ]);
 
 $res = curl_exec($ch);
+$data = json_decode($res, true);
 
-if ($res === false) {
-    die("CURL ERROR TOKEN: " . curl_error($ch));
-}
+echo "<pre>";
+echo "Respuesta PayPal:\n";
+var_dump($res);
 
-curl_close($ch);
+echo "\nDatos decodificados:\n";
+var_dump($data);
+
+echo "\nError CURL:\n";
+var_dump(curl_error($ch));
+echo "</pre>";
+exit;
 
 $token = $data['access_token'] ?? null;
-
 if (!$token) {
     $_SESSION['error'] = "Error obteniendo token PayPal";
     header("Location: perfil.php");
