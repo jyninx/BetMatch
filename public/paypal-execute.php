@@ -127,9 +127,7 @@ if (!$order_id) {
     exit();
 }
 
-/* =========================
-   1. TOKEN
-========================= */
+
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
@@ -151,9 +149,7 @@ if (!$token) {
     exit();
 }
 
-/* =========================
-   2. CAPTURAR ORDER
-========================= */
+
 $ch = curl_init();
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders/$order_id/capture");
@@ -169,9 +165,7 @@ $res = curl_exec($ch);
 $result = json_decode($res, true);
 curl_close($ch);
 
-/* =========================
-   3. VALIDAR PAGO
-========================= */
+
 if (($result['status'] ?? '') === 'COMPLETED') {
 
     $cantidad = $_SESSION['paypal_amount'] ?? 0;
