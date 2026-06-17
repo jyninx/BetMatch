@@ -95,7 +95,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../app/config/paypal.php';
 
-
+die('VERSION NUEVA PAYPAL-DEPOSIT');
 $cantidad = floatval($_GET['amount'] ?? 0);
 
 if ($cantidad <= 0) {
