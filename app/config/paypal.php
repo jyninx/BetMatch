@@ -2,8 +2,8 @@
 require_once __DIR__ . '/env.php';
 
 define('PAYPAL_MODE', env('PAYPAL_MODE', 'sandbox'));
-define('PAYPAL_CLIENT_ID', getenv('PAYPAL_CLIENT_ID'));
-define('PAYPAL_CLIENT_SECRET', getenv('PAYPAL_CLIENT_SECRET'));
+define('PAYPAL_CLIENT_ID', env('PAYPAL_CLIENT_ID', ''));
+define('PAYPAL_CLIENT_SECRET', env('PAYPAL_CLIENT_SECRET', ''));
 
 define('APP_URL', env('APP_URL', 'http://localhost/BetMatch'));
 
