@@ -95,7 +95,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../app/config/paypal.php';
 
-die('VERSION NUEVA PAYPAL-DEPOSIT');
+
 $cantidad = floatval($_GET['amount'] ?? 0);
 
 if ($cantidad <= 0) {
@@ -121,16 +121,9 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 $res = curl_exec($ch);
 $data = json_decode($res, true);
 
-echo "<pre>";
-echo "Respuesta PayPal:\n";
-var_dump($res);
-
-echo "\nDatos decodificados:\n";
-var_dump($data);
-
-echo "\nError CURL:\n";
-var_dump(curl_error($ch));
-echo "</pre>";
+echo '<pre>';
+var_dump($result);
+echo '</pre>';
 exit;
 
 $token = $data['access_token'] ?? null;
