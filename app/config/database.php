@@ -1,5 +1,4 @@
 <?php
-
 function asegurar_tablas($conexion) {
     $consulta = $conexion->query("SHOW TABLES LIKE 'usuarios'");
     if ($consulta->rowCount() > 0) {
