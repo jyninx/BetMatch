@@ -1,0 +1,102 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #1E2A38;
+    color: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+body > *:not(header) {
+    animation: fadeInUp 0.45s ease-out both;
+}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #15202B;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+}
+
+
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.hero h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+
+.btn {
+    background-color: #2D9C5A;
+    color: white;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #27A24C;
+}
+
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
+.card {
+    background: #ffffff;
+    color: #212121;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+}
+
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none; 
+    color: inherit;
+}
+.logo-icon {
+    font-size: 20px;
+}
+.logo-text {
+    font-weight: 700;
+    font-size: 18px;
+}
