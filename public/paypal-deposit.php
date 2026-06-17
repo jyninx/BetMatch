@@ -162,15 +162,18 @@ if ($res === false) {
     die("CURL ERROR ORDER: " . curl_error($ch));
 }
 
-$result = json_decode($res, true);
-echo '<pre>';
-var_dump($result);
-echo '</pre>';
-exit;
+
 
 curl_close($ch);
 
+echo '<pre>';
+echo "RESPUESTA ORDER:\n";
+var_dump($result);
 
+echo "\nRAW RESPONSE:\n";
+var_dump($res);
+echo '</pre>';
+exit;
 
 if (!empty($result['links'])) {
     foreach ($result['links'] as $link) {
