@@ -104,6 +104,19 @@ if ($cantidad <= 0) {
 
 
 $ch = curl_init();
+$res = curl_exec($ch);
+
+if ($res === false) {
+    die("CURL ERROR: " . curl_error($ch));
+}
+
+$data = json_decode($res, true);
+
+echo "<pre>";
+var_dump($res);
+var_dump($data);
+echo "</pre>";
+exit;
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
