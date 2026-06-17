@@ -96,8 +96,10 @@ if (!isset($_SESSION['user_id'])) {
 require_once '../app/config/paypal.php';
 
 var_dump([
-    'ENV_ID' => $_ENV['PAYPAL_CLIENT_ID'] ?? null,
-    'GETENV_ID' => getenv('PAYPAL_CLIENT_ID'),
+    'client' => PAYPAL_CLIENT_ID,
+    'secret_len' => strlen(PAYPAL_CLIENT_SECRET),
+    'mode' => PAYPAL_MODE,
+    'base' => PAYPAL_API_BASE
 ]);
 exit;
 $cantidad = floatval($_GET['amount'] ?? 0);
