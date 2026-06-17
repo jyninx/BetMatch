@@ -95,13 +95,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../app/config/paypal.php';
 
-var_dump([
-    'client' => PAYPAL_CLIENT_ID,
-    'secret_len' => strlen(PAYPAL_CLIENT_SECRET),
-    'mode' => PAYPAL_MODE,
-    'base' => PAYPAL_API_BASE
-]);
-exit;
+
 $cantidad = floatval($_GET['amount'] ?? 0);
 
 if ($cantidad <= 0) {
