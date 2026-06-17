@@ -123,7 +123,11 @@ if ($res === false) {
     die("CURL ERROR TOKEN: " . curl_error($ch));
 }
 
-$data = json_decode($res, true);
+echo "<pre>";
+var_dump($res);
+var_dump($data = json_decode($res, true));
+echo "</pre>";
+exit;
 curl_close($ch);
 
 $token = $data['access_token'] ?? null;
