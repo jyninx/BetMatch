@@ -85,6 +85,7 @@ $_SESSION['error'] = 'Error al crear el pago en PayPal: ' . $mensaje_error;
 error_log('PayPal payment creation error: ' . $mensaje_error);
 header('Location: perfil.php');
 exit(); */
+<?php
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
@@ -103,59 +104,25 @@ if ($cantidad <= 0) {
 }
 
 
+
 $ch = curl_init();
-
-if (!isset($ch)) {
-    die(" CURL handler no inicializado");
-}
-
-$info = curl_getinfo($ch);
-
-var_dump($info);
-
-if (empty($info['url'])) {
-    die(" NO HAY URL ASIGNADA AL CURL");
-}
-
-
-$res = curl_exec($ch);
-
-if ($res === false) {
-    die("CURL ERROR: " . curl_error($ch));
-}
-
-$data = json_decode($res, true);
-
-echo "<pre>";
-var_dump($res);
-var_dump($data);
-echo "</pre>";
-exit;
 
 curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
-
 curl_setopt($ch, CURLOPT_USERPWD, PAYPAL_CLIENT_ID . ":" . PAYPAL_CLIENT_SECRET);
-
 curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
-
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Accept: application/json",
     "Accept-Language: en_US"
 ]);
-if (!isset($ch)) {
-    die(" X CURL handler no inicializado");
-}
 
-$info = curl_getinfo($ch);
-
-var_dump($info);
-
-if (empty($info['url'])) {
-    die("X NO HAY URL ASIGNADA AL CURL");
-}
 $res = curl_exec($ch);
+
+if ($res === false) {
+    die("CURL ERROR TOKEN: " . curl_error($ch));
+}
+
 $data = json_decode($res, true);
 curl_close($ch);
 
@@ -168,36 +135,42 @@ if (!$token) {
 }
 
 
-$ch = curl_init();
 
-curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders");
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
+$ch = curl_init();
 
 $order = [
     "intent" => "CAPTURE",
     "purchase_units" => [[
         "amount" => [
             "currency_code" => "EUR",
-            "value" => $cantidad
+            "value" => number_format($cantidad, 2, '.', '')
         ]
     ]],
     "application_context" => [
-        "return_url" => "https://TU_DOMINIO/paypal-execute.php",
-        "cancel_url" => "https://TU_DOMINIO/perfil.php"
+        "return_url" => PAYPAL_RETURN_URL,
+        "cancel_url" => PAYPAL_CANCEL_URL
     ]
 ];
 
+curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($order));
-
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Content-Type: application/json",
     "Authorization: Bearer " . $token
 ]);
 
 $res = curl_exec($ch);
+
+if ($res === false) {
+    die("CURL ERROR ORDER: " . curl_error($ch));
+}
+
 $result = json_decode($res, true);
 curl_close($ch);
+
+
 
 if (!empty($result['links'])) {
     foreach ($result['links'] as $link) {
