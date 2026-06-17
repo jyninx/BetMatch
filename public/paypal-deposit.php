@@ -85,7 +85,7 @@ $_SESSION['error'] = 'Error al crear el pago en PayPal: ' . $mensaje_error;
 error_log('PayPal payment creation error: ' . $mensaje_error);
 header('Location: perfil.php');
 exit(); */
-<?php
+
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
