@@ -102,7 +102,8 @@ if ($cantidad <= 0) {
     exit();
 }
 
-
+var_dump(PAYPAL_API_BASE);
+exit;
 $ch = curl_init();
 $res = curl_exec($ch);
 
