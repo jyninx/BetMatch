@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: auth/login.php');
@@ -105,4 +105,98 @@ if (isset($pago_ejecutado['state']) && $pago_ejecutado['state'] === 'approved') 
     $_SESSION['error'] = 'El pago no se completo correctamente';
     header('Location: perfil.php');
     exit();
+} */ 
+
+    <?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: auth/login.php');
+    exit();
 }
+
+require_once '../app/dao/UsuarioDAO.php';
+require_once '../app/dao/TransaccionDAO.php';
+require_once '../app/config/paypal.php';
+
+$order_id = $_GET['token'] ?? null;
+
+if (!$order_id) {
+    $_SESSION['error'] = "Pago inválido";
+    header("Location: perfil.php");
+    exit();
+}
+
+/* =========================
+   1. TOKEN
+========================= */
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+
+curl_setopt($ch, CURLOPT_USERPWD, PAYPAL_CLIENT_ID . ":" . PAYPAL_CLIENT_SECRET);
+curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+
+$res = curl_exec($ch);
+$data = json_decode($res, true);
+curl_close($ch);
+
+$token = $data['access_token'] ?? null;
+
+if (!$token) {
+    $_SESSION['error'] = "Error obteniendo token PayPal";
+    header("Location: perfil.php");
+    exit();
+}
+
+/* =========================
+   2. CAPTURAR ORDER
+========================= */
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders/$order_id/capture");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json",
+    "Authorization: Bearer " . $token
+]);
+
+$res = curl_exec($ch);
+$result = json_decode($res, true);
+curl_close($ch);
+
+/* =========================
+   3. VALIDAR PAGO
+========================= */
+if (($result['status'] ?? '') === 'COMPLETED') {
+
+    $cantidad = $_SESSION['paypal_amount'] ?? 0;
+
+    require_once '../app/dao/UsuarioDAO.php';
+    require_once '../app/dao/TransaccionDAO.php';
+
+    $dao_usuarios = new UsuarioDAO();
+    $dao_transaccion = new TransaccionDAO();
+
+    $usuario = $dao_usuarios->buscarPorId($_SESSION['user_id']);
+
+    $nuevo_saldo = $usuario['saldo'] + $cantidad;
+
+    $dao_usuarios->actualizarSaldo($_SESSION['user_id'], $nuevo_saldo);
+
+    $_SESSION['user_saldo'] = $nuevo_saldo;
+
+    unset($_SESSION['paypal_amount']);
+
+    $_SESSION['success'] = "Depósito completado correctamente";
+    header("Location: perfil.php");
+    exit();
+}
+
+$_SESSION['error'] = "El pago no se completó";
+header("Location: perfil.php");
+exit();

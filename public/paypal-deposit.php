@@ -1,5 +1,5 @@
 <?php
-session_start();
+/* session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: auth/login.php');
@@ -27,11 +27,13 @@ curl_setopt($solicitud_token, CURLOPT_USERPWD, PAYPAL_CLIENT_ID . ':' . PAYPAL_C
 curl_setopt($solicitud_token, CURLOPT_HTTPHEADER, array('Accept: application/json'));
 
 $respuesta_token = curl_exec($solicitud_token);
+$curl_error_token = curl_error($solicitud_token);
 $token_acceso = json_decode($respuesta_token, true);
 curl_close($solicitud_token);
 
 if (!isset($token_acceso['access_token'])) {
-    $_SESSION['error'] = 'No se pudo conectar con PayPal';
+    $_SESSION['error'] = 'No se pudo conectar con PayPal: ' . ($curl_error_token ?: $respuesta_token ?: 'respuesta vacía');
+    error_log('PayPal token error: ' . ($curl_error_token ?: $respuesta_token ?: 'respuesta vacía'));
     header('Location: perfil.php');
     exit();
 }
@@ -65,6 +67,7 @@ curl_setopt($solicitud_pago, CURLOPT_HTTPHEADER, array(
 ));
 
 $respuesta_pago = curl_exec($solicitud_pago);
+$curl_error_pago = curl_error($solicitud_pago);
 $pago = json_decode($respuesta_pago, true);
 curl_close($solicitud_pago);
 
@@ -77,7 +80,106 @@ if (isset($pago['links'])) {
     }
 }
 
-$mensaje_error = isset($pago['message']) ? $pago['message'] : 'error desconocido';
+$mensaje_error = isset($pago['message']) ? $pago['message'] : ($curl_error_pago ?: $respuesta_pago ?: 'error desconocido');
 $_SESSION['error'] = 'Error al crear el pago en PayPal: ' . $mensaje_error;
+error_log('PayPal payment creation error: ' . $mensaje_error);
 header('Location: perfil.php');
+exit(); */
+
+<?php
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: auth/login.php');
+    exit();
+}
+
+require_once '../app/config/paypal.php';
+
+$cantidad = floatval($_GET['amount'] ?? 0);
+
+if ($cantidad <= 0) {
+    $_SESSION['error'] = "Cantidad inválida";
+    header("Location: perfil.php");
+    exit();
+}
+
+/* =========================
+   1. OBTENER TOKEN
+========================= */
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v1/oauth2/token");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+
+curl_setopt($ch, CURLOPT_USERPWD, PAYPAL_CLIENT_ID . ":" . PAYPAL_CLIENT_SECRET);
+
+curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Accept: application/json",
+    "Accept-Language: en_US"
+]);
+
+$res = curl_exec($ch);
+$data = json_decode($res, true);
+curl_close($ch);
+
+$token = $data['access_token'] ?? null;
+
+if (!$token) {
+    $_SESSION['error'] = "Error obteniendo token PayPal";
+    header("Location: perfil.php");
+    exit();
+}
+
+/* =========================
+   2. CREAR ORDER (V2)
+========================= */
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, PAYPAL_API_BASE . "/v2/checkout/orders");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+
+$order = [
+    "intent" => "CAPTURE",
+    "purchase_units" => [[
+        "amount" => [
+            "currency_code" => "EUR",
+            "value" => $cantidad
+        ]
+    ]],
+    "application_context" => [
+        "return_url" => "https://TU_DOMINIO/paypal-execute.php",
+        "cancel_url" => "https://TU_DOMINIO/perfil.php"
+    ]
+];
+
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($order));
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json",
+    "Authorization: Bearer " . $token
+]);
+
+$res = curl_exec($ch);
+$result = json_decode($res, true);
+curl_close($ch);
+
+/* =========================
+   3. REDIRIGIR A PAYPAL
+========================= */
+if (!empty($result['links'])) {
+    foreach ($result['links'] as $link) {
+        if ($link['rel'] === 'approve') {
+            header("Location: " . $link['href']);
+            exit();
+        }
+    }
+}
+
+$_SESSION['error'] = "Error creando la orden de PayPal";
+header("Location: perfil.php");
 exit();
