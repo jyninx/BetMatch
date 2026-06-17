@@ -121,10 +121,6 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
 $res = curl_exec($ch);
 $data = json_decode($res, true);
 
-echo '<pre>';
-var_dump($result);
-echo '</pre>';
-exit;
 
 $token = $data['access_token'] ?? null;
 if (!$token) {
@@ -167,6 +163,11 @@ if ($res === false) {
 }
 
 $result = json_decode($res, true);
+echo '<pre>';
+var_dump($result);
+echo '</pre>';
+exit;
+
 curl_close($ch);
 
 
