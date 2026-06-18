@@ -7,10 +7,10 @@ define('PAYPAL_CLIENT_SECRET', $_ENV['PAYPAL_CLIENT_SECRET'] ?? getenv('PAYPAL_C
 
 define('APP_URL', env('APP_URL', 'http://localhost/BetMatch'));
 
-$url_retorno = APP_URL . '/public/paypal-execute.php';
+$url_retorno = APP_URL . '/paypal-execute.php';
 define('PAYPAL_RETURN_URL', env('PAYPAL_RETURN_URL', $url_retorno));
 
-$url_cancelacion = APP_URL . '/public/perfil.php';
+$url_cancelacion = APP_URL . '/perfil.php';
 define('PAYPAL_CANCEL_URL', env('PAYPAL_CANCEL_URL', $url_cancelacion));
 
 if (PAYPAL_MODE == 'live') {
