@@ -5,7 +5,7 @@ define('PAYPAL_MODE', env('PAYPAL_MODE', 'sandbox'));
 define('PAYPAL_CLIENT_ID', $_ENV['PAYPAL_CLIENT_ID'] ?? getenv('PAYPAL_CLIENT_ID') ?? '');
 define('PAYPAL_CLIENT_SECRET', $_ENV['PAYPAL_CLIENT_SECRET'] ?? getenv('PAYPAL_CLIENT_SECRET') ?? '');
 
-define('APP_URL', env('APP_URL', 'http://localhost/BetMatch'));
+define('APP_URL', env('APP_URL', 'https://betmatch-production.up.railway.app/paypal-execute.php'));
 
 $url_retorno = APP_URL . '/paypal-execute.php';
 define('PAYPAL_RETURN_URL', env('PAYPAL_RETURN_URL', $url_retorno));
