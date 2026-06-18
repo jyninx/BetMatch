@@ -107,7 +107,7 @@ if (isset($pago_ejecutado['state']) && $pago_ejecutado['state'] === 'approved') 
     exit();
 } */ 
 
-    <?php
+    
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
