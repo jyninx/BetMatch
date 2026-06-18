@@ -103,7 +103,7 @@ if ($cantidad <= 0) {
     header("Location: perfil.php");
     exit();
 }
-
+$_SESSION['paypal_amount'] = $cantidad;
 
 
 $ch = curl_init();
@@ -166,8 +166,7 @@ $result = json_decode($res, true);
 
 curl_close($ch);
 
-  echo "RETURN URL: " . PAYPAL_RETURN_URL;
-    exit;
+  
 
 if (!empty($result['links'])) {
     foreach ($result['links'] as $link) {
