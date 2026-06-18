@@ -21,7 +21,7 @@ body > *:not(header) {
     animation: fadeInUp 0.45s ease-out both;
 }
 
-
+/* HEADER UNIFICADO*/
 header {
     display: flex;
     justify-content: space-between;
@@ -54,7 +54,7 @@ header {
     color: transparent;
 }
 
-
+/* ============ NAV UNIFICADO */
 nav {
     display: flex;
     align-items: center;
@@ -73,7 +73,7 @@ nav a:hover {
     color: #2D9C5A;
 }
 
-
+/* MAIN  */
 main {
     flex: 1;
     display: flex;
@@ -82,7 +82,7 @@ main {
     padding: 40px 20px;
 }
 
-
+/* ============ CAJA DE LOGIN ============ */
 .login-box {
     width: 500px;
     background: #FFFFFF;
@@ -106,7 +106,7 @@ main {
     font-size: 15px;
 }
 
-
+/* ============ INPUTS ============ */
 input[type="email"],
 input[type="password"] {
     width: 100%;
@@ -126,7 +126,7 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(45, 156, 90, 0.15);
 }
 
-
+/* ============ OPCIONES ============ */
 .options {
     display: flex;
     justify-content: space-between;
@@ -153,7 +153,7 @@ input:focus {
     text-decoration: underline;
 }
 
-
+/* ============ BOTONES ============ */
 button {
     width: 100%;
     padding: 16px;
@@ -174,7 +174,7 @@ button:hover {
     transform: translateY(-2px);
 }
 
-
+/* ============ ALERTAS ============ */
 .alert {
     padding: 12px 16px;
     border-radius: 8px;
@@ -194,7 +194,7 @@ button:hover {
     border-left: 4px solid #28a745;
 }
 
-
+/* ============ ENLACES ============ */
 .register {
     text-align: center;
     margin-top: 25px;
@@ -211,7 +211,7 @@ button:hover {
 .register a:hover {
     text-decoration: underline;
 }
-
+/* Eliminar subrayado de todos los enlaces */
 a {
     text-decoration: none;
 }
@@ -228,13 +228,13 @@ footer a {
     text-decoration: none;
 }
 
-
+/* Mantener subrayado solo en enlaces específicos al pasar el mouse */
 .forgot:hover,
 .register a:hover,
 .login-link a:hover {
     text-decoration: underline;
 }
-
+/* ============ FOOTER ============ */
 footer {
     display: flex;
     justify-content: space-between;
@@ -253,7 +253,7 @@ footer {
     color: #2D9C5A;
     text-decoration: underline;
 }
-
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     header {
         padding: 20px;
@@ -284,17 +284,17 @@ footer {
     }
 }
 
-
+/* Transición principal */
 .dashboard-container {
     animation: fadeInUp 0.5s ease-out;
 }
 
-
+/* Hero section */
 .hero {
     animation: fadeInUp 0.5s ease-out;
 }
 
-
+/* Tarjetas de estadísticas */
 .stat-card {
     animation: fadeInUp 0.5s ease-out backwards;
 }
@@ -304,7 +304,7 @@ footer {
 .stat-card:nth-child(3) { animation-delay: 0.3s; }
 .stat-card:nth-child(4) { animation-delay: 0.4s; }
 
-
+/* Actividades */
 .actividad-item {
     animation: fadeInUp 0.4s ease-out backwards;
 }
@@ -315,7 +315,7 @@ footer {
 .actividad-item:nth-child(4) { animation-delay: 0.4s; }
 .actividad-item:nth-child(5) { animation-delay: 0.5s; }
 
-
+/* Acciones rápidas */
 .accion-card {
     animation: fadeInUp 0.4s ease-out backwards;
 }

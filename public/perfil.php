@@ -202,15 +202,7 @@ if (isset($_SESSION['success'])) {
             </div>
         </div>
         
-        <div class="info-card">
-            <div class="info-header">
-                <span class="info-label">Foto de perfil</span>
-            </div>
-            <div class="info-value">
-                <input type="file" disabled>
-                <!-- TODO: subir imagen cuando este listo el backend -->
-            </div>
-        </div>
+     
 
         <div class="info-card">
             <div class="info-header">

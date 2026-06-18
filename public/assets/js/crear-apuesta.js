@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     boton.textContent = 'Sincronizar eventos';
 
     if (datos.ok) {
-
+        
         mostrarResultadoSincronizacion(
             datos.mensaje || 'Sincronización completada',
             'success'
