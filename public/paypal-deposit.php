@@ -166,7 +166,8 @@ $result = json_decode($res, true);
 
 curl_close($ch);
 
-
+  echo "RETURN URL: " . PAYPAL_RETURN_URL;
+    exit;
 
 if (!empty($result['links'])) {
     foreach ($result['links'] as $link) {
